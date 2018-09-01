@@ -33,6 +33,8 @@ gem 'figaro', '~> 1.1', '>= 1.1.1'
 
 gem 'simple_form', '~> 4.0', '>= 4.0.1'
 
+gem 'nokogiri', '~> 1.8', '>= 1.8.4'
+
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

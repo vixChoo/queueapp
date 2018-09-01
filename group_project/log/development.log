@@ -4415,3 +4415,43 @@ Processing by Devise::SessionsController#new as HTML
 Completed 200 OK in 24ms (Views: 22.7ms | ActiveRecord: 0.0ms)
 
 
+Started GET "/" for 127.0.0.1 at 2018-09-01 23:25:28 +0800
+  [1m[35m (39.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  ↳ /home/vin/.asdf/installs/ruby/2.5.0/lib/ruby/gems/2.5.0/gems/activerecord-5.2.1/lib/active_record/log_subscriber.rb:98
+Processing by TestController#index as HTML
+  Rendering test/index.html.erb within layouts/application
+  Rendered test/index.html.erb within layouts/application (5.5ms)
+Completed 200 OK in 263ms (Views: 252.0ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/" for 127.0.0.1 at 2018-09-01 23:25:41 +0800
+Processing by TestController#index as HTML
+  Rendering test/index.html.erb within layouts/application
+  Rendered test/index.html.erb within layouts/application (0.6ms)
+Completed 200 OK in 15ms (Views: 13.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/users/sign_in" for 127.0.0.1 at 2018-09-01 23:26:40 +0800
+Processing by Devise::SessionsController#new as HTML
+Started GET "/users/sign_in" for 127.0.0.1 at 2018-09-01 23:26:40 +0800
+Processing by Devise::SessionsController#new as HTML
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendering devise/sessions/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (1.0ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (56.9ms)
+  Rendered devise/shared/_links.html.erb (0.2ms)
+  Rendered devise/sessions/new.html.erb within layouts/application (19.4ms)
+Completed 200 OK in 127ms (Views: 85.5ms | ActiveRecord: 25.1ms)
+
+
+Completed 200 OK in 125ms (Views: 85.5ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/users/sign_up" for 127.0.0.1 at 2018-09-01 23:26:43 +0800
+Processing by Devise::RegistrationsController#new as HTML
+  Rendering devise/registrations/new.html.erb within layouts/application
+  Rendered devise/shared/_links.html.erb (1.2ms)
+  Rendered devise/registrations/new.html.erb within layouts/application (12.7ms)
+Completed 200 OK in 30ms (Views: 29.1ms | ActiveRecord: 0.0ms)
+
+
