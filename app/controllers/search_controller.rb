@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'httparty'
 require 'watir'
 require 'sentimental'
+require 'date'
 
 
 
@@ -11,13 +12,18 @@ class SearchController < ApplicationController
 
 		# set search word #
 		if params[:searchword]
+			
 			security_name = params[:searchword]
+			respond_to do |format|
+		      format.html
+		      format.js
+		    end
 		elsif user_signed_in? && current_user.watchlist.any?
 			security_name = "current_user.watchlists.first.name"	
 		else
-			security_name = "google"
+			security_name = "facebook"
 		end
-
+		
 		# automated browsing #
 		automated_browser(security_name)
 
@@ -40,7 +46,11 @@ class SearchController < ApplicationController
 	    browser_grab_images
 
 	    # close automated browser #
-	    @browser.close
+	    @browser.close   
+ 	end
+
+ 	def brokers
+
  	end
 
 
@@ -48,9 +58,9 @@ class SearchController < ApplicationController
 		security_name = security_name
  		# @browser = Watir::Browser.new(:chrome)
  		@browser = Watir::Browser.new :chrome, headless: true
+ 		@browser.window.maximize
 	    @browser.goto("https://www.msn.com/en-my/money/")
-	
-	    @browser.text_field(id:"finance-autosuggest").set security_name
+	    @browser.text_field(id:"finance-autosuggest").set security_name 
 	    @browser.send_keys :enter
 	    sleep 1
 	    @parsed_page = Nokogiri::HTML(@browser.html)
@@ -58,38 +68,12 @@ class SearchController < ApplicationController
  	end
 
  	def browser_company_info
- 		@browser.div(class: "dynaloadable").ul.li(id: "profile").click
-	    parsed_page = Nokogiri::HTML(@browser.html)
-	    @browser.div(class:"rdmr-sels-btns").click
-	    parsed_page = Nokogiri::HTML(@browser.html)
-
-	    ######### company description #########
-	    @company_description = parsed_page.css("div.company-description").text
-	    @company_link = parsed_page.css("a.companyprofile-link").attribute('href').value
-	    @company_sector = parsed_page.css("p.captionData").first.text
-	end
-
-	def browser_grab_images
-
-		###### Redirect browser to get logo ######
-		@browser.goto("https://www.bing.com/images/search?q=#{@company[:company_name]}%20icon")
-	    sleep 1
-	    parsed_page = Nokogiri::HTML(@browser.html)
-	    logo = parsed_page.at_css("div.img_cont img").attribute('src').value
-	    @logo = logo
-
-	    ###### Redirect browser to get background ######
-	    @browser.goto("https://www.bing.com/images/search?q=#{@company[:company_name]}%20company%20logo")
-	    sleep 1
-	    parsed_page = Nokogiri::HTML(@browser.html)
-	    cover = parsed_page.at_css("div.img_cont img").attribute('src').value
-	    @cover = cover
-
-	end
-
- 	def set_analyzer
-	  $analyzer = Sentimental.new
-	  $analyzer.load_defaults
+ 		url = "https://www.marketwatch.com/investing/stock/#{@company[:ticker]}/profile"
+      	unparsed_page = HTTParty.get(url)
+	  	parsed_page = Nokogiri::HTML(unparsed_page)
+ 		######### company description #########
+ 		@company_description = parsed_page.css('#maincontent div.full p').text
+ 		@company_sector = parsed_page.css('div.twowide div:nth-child(3) p.data').first.text
 	end
 
 	def company_info(parsed_page)
@@ -99,12 +83,12 @@ class SearchController < ApplicationController
 	      ticker: parsed_page.css("div.live-quote-subtitle").text.split.last,
 	      company_name: parsed_page.css("div.live-quote-title").text.split.first,
 	      twitter: parsed_page.css("div.live-quote-subtitle").text.split.last.insert(0,'$'),
-	      twitter_mention: parsed_page.css("div.live-quote-subtitle").text.split.last.insert(0,'@'),
 	      price: parsed_page.css("div.live-quote-bottom-tile span").first.text,
 	      change_percent: parsed_page.css("div.live-quote-bottom-tile div div:nth-child(2)")[0].text,
 	      change_price: parsed_page.css("div.live-quote-bottom-tile div div:nth-child(1)")[0].text 
 	    }
 	    @company = company
+	    @time = parsed_page.css("div.exchange-attribute span").first.text
 	end
 
 	def company_articles(parsed_page)
@@ -155,6 +139,28 @@ class SearchController < ApplicationController
 
 	end
 
+	def browser_grab_images
+		###### Redirect browser to get logo ######
+		@browser.goto("https://www.bing.com/images/search?q=#{@company[:company_name]}%20icon")
+	    sleep 1
+	    parsed_page = Nokogiri::HTML(@browser.html)
+	    logo = parsed_page.at_css("div.img_cont img").attribute('src').value
+	    @logo = logo
+
+	    ###### Redirect browser to get background ######
+	    @browser.goto("https://www.bing.com/images/search?q=#{@company[:company_name]}%20company%20logo%20")
+	    sleep 1
+	    parsed_page = Nokogiri::HTML(@browser.html)
+	    cover = parsed_page.at_css("div.img_cont img").attribute('src').value
+	    @cover = cover
+
+	end
+
+	def set_analyzer
+	  $analyzer = Sentimental.new
+	  $analyzer.load_defaults
+	end
+
 	def sentimental(tweets)
 	  @tweets = tweets
 	  negative = 0
@@ -170,7 +176,9 @@ class SearchController < ApplicationController
 	  end
 	  @positive = (positive.to_f / 20 * 100).round
 	  @negative = (negative.to_f / 20 * 100).round
-	  @avg_score = ((score / @tweets.count)*100).round
 	end
 
+	def search_params
+      params.require(:search).permit(:searchword)
+    end
 end

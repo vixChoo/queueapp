@@ -64,6 +64,7 @@ group :development do
 
   ### sentimental feature #####
   gem 'sentimental', '~> 1.4', '>= 1.4.1'
+  gem 'meta_request'
 end
 
 group :test do
