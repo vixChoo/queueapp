@@ -52,8 +52,8 @@ module WatchlistHelper
             # browser.close
 
             ########## new sentimental ################
-             $analyzer = Sentimental.new
-	         $analyzer.load_defaults
+           analyzer = Sentimental.new
+	       analyzer.load_defaults
 
             ########## redirect to twitter ################
             url = "https://twitter.com/search?f=tweets&q=#{company[:twitter]}"
@@ -74,32 +74,54 @@ module WatchlistHelper
             ###### set sentiment ##############
             security_tweets.each do |tweet|
                 body = tweet[:content] 
-                tweet[:sentiment] = $analyzer.sentiment(body)
-                tweet[:score] = $analyzer.score(body)
+                tweet[:sentiment] = analyzer.sentiment(body)
+                tweet[:score] = analyzer.score(body)
             end
 
             @tweets = security_tweets
 
-            # create sentiment from tweets #
-                negative = 0
-                positive = 0
-                score = 0
-                @tweets.each do |tweet|
-                    score = score + tweet[:score]
-                    if tweet[:score] < 0
-                    negative += 1
-                    else
-                    positive += 1
-                    end
+
+
+
+            negative = 0
+            positive = 0
+            score = 0
+            @tweets.each do |tweet|
+             score = score + tweet[:score]
+             if tweet[:score] < 0
+              negative += 1
+             else
+              positive += 1
+             end
+            end
+            company[:positive] << (positive.to_f / 20 * 100).round
+            comapny[:negative] << (negative.to_f / 20 * 100).round
+
+
+
+
+
+
+            # # create sentiment from tweets #
+            #     negative = 0
+            #     positive = 0
+            #     score = 0
+            #     @tweets.each do |tweet|
+            #         score = score + tweet[:score]
+            #         if tweet[:score] < 0
+            #         negative += 1
+            #         else
+            #         positive += 1
+            #         end
                     
-                end
+            #     end
                     
-                @positive = (positive.to_f / 20 * 100).round
-                @negative = (negative.to_f / 20 * 100).round
+            #     @positive = (positive.to_f / 20 * 100).round
+            #     @negative = (negative.to_f / 20 * 100).round
 
             
-                scores << @positive
-                scores << @negative
+                # scores << @positive
+                # scores << @negative
 
                 watchlists << company
               #  array << wactlist{}  #
@@ -107,7 +129,7 @@ module WatchlistHelper
             end
 
                 @watchlists = watchlists
-                @scores = scores
+                # @scores = scores
                 
         end
     

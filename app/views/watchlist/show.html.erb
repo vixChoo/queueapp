@@ -51,7 +51,7 @@
                                     <div class="card-body" >
 
                                       <!-- Sentiment float right -->
-                                      <h4 class="card-title"><%= watchlist.fetch(:company_name) %><span class="text-success font-weight-bold text-uppercase float-right"><%="#{@scores[0]} "%><small>%</small> Bull</span></h4><h5><%= watchlist.fetch(:ticker) %><span class="text-danger font-weight-bold text-uppercase float-right"><%= "#{@scores[1]} " %><small>%</small> Bear </span></h5><h3 class="font-weight-bold"><small>$</small><%= " #{watchlist.fetch(:price)}" %></h3>
+                                      <h4 class="card-title"><%= watchlist.fetch(:company_name) %><span class="text-success font-weight-bold text-uppercase float-right"><%="#{watchlist.fetch(:positive)} "%><small>%</small> Buy</span></h4><h5><%= watchlist.fetch(:ticker) %><span class="text-danger font-weight-bold text-uppercase float-right"><%= "#{watchlist.fetch(:negative)} " %><small>%</small> Sell </span></h5><h3 class="font-weight-bold"><small>$</small><%= " #{watchlist.fetch(:price)}" %></h3>
                                               <% if watchlist.fetch(:change_price)[0]=="+" %> <span class="text-success"> <% else %> <span class="text-danger"><% end %> 
                                               <%= watchlist.fetch(:change_price)%></span> <% if watchlist.fetch(:change_percent)[0]=="+" %> <span class="text-success"> 
                                               <% else %> <span class="text-danger"><% end %> (<%= watchlist.fetch(:change_percent) %>)</span></h5>
@@ -68,7 +68,7 @@
                                                   <% end %>
 
                                                   <!-- Sentiment -->
-                                                  <% @scores.shift[1] %>
+                                                 <!--  <% @scores.shift[1] %> -->
                                               <!-- scores = [positive,negative] shift[1] is take off  arr[0] twice -->
 
                                               
