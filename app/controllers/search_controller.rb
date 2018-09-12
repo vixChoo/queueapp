@@ -63,17 +63,18 @@ class SearchController < ApplicationController
 
 
  	def automated_browser(security_name)
- 		opts = {
-		    headless: true
-		  }
+ 		# opts = {
+		 #    headless: true
+		 #  }
 
-		  if (chrome_bin = ENV.fetch('GOOGLE_CHROME_SHIM', nil))
-		    opts.merge!( options: {binary: chrome_bin})
-		  end 
+		 #  if (chrome_bin = ENV.fetch('GOOGLE_CHROME_SHIM', nil))
+		 #    opts.merge!( options: {binary: chrome_bin})
+		 #  end 
+		# @browser = Watir::Browser.new :chrome, opts
 		security_name = security_name
- 		# @browser = Watir::Browser.new(:chrome)
+ 		@browser = Watir::Browser.new(:chrome)
  		# @browser = Watir::Browser.new :chrome, headless: true
- 		@browser = Watir::Browser.new :chrome, opts 		
+ 		 		
 		@browser.window.maximize
 	    @browser.goto("https://www.msn.com/en-my/money/")
 	    @browser.text_field(id:"finance-autosuggest").set security_name 
@@ -116,9 +117,11 @@ class SearchController < ApplicationController
 	end
 
 	def browser_company_info
- 		url = "https://www.marketwatch.com/investing/stock/#{@company[:ticker]}/profile"
-      	unparsed_page = HTTParty.get(url)
-	  	parsed_page = Nokogiri::HTML(unparsed_page)
+		@browser.goto("https://www.marketwatch.com/investing/stock/#{@company[:ticker]}/profile")
+		parsed_page = Nokogiri::HTML(@browser.html)
+ 		# url = "https://www.marketwatch.com/investing/stock/#{@company[:ticker]}/profile"
+      	# unparsed_page = HTTParty.get(url)
+	  	# parsed_page = Nokogiri::HTML(unparsed_page)
  		######### company description #########
  		@company_description = parsed_page.css('#maincontent div.full p').text
  		@company_sector = parsed_page.css('div.twowide div:nth-child(3) p.data').first.text
@@ -128,9 +131,10 @@ class SearchController < ApplicationController
 	  security = security
 	  set_analyzer
 	  ########## set page for scrape #################
-	  url = "https://twitter.com/search?f=tweets&q=#{security}"
-      unparsed_page = HTTParty.get(url)
-	  parsed_page = Nokogiri::HTML(unparsed_page)
+	  @browser.goto("https://twitter.com/search?f=tweets&q=#{security}")
+	  # url = "https://twitter.com/search?f=tweets&q=#{security}"
+      # unparsed_page = HTTParty.get(url)
+	  parsed_page = Nokogiri::HTML(@browser.html)
 	  ########## create tweets array ################
 	  tweets = parsed_page.css('div.tweet')
 	  security_tweets = []
