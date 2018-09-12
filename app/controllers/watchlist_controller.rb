@@ -4,7 +4,6 @@ class WatchlistController < ApplicationController
     after_action :set_watchlist, only: [:edit, :update, :destroy]
 
 
-
 	def show
 		if current_user 
 			watchlist
