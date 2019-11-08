@@ -28,7 +28,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Vix ADDED HERE
-gem 'devise', '~> 4.5'
+gem 'devise', '~> 4.7'
 gem 'figaro', '~> 1.1', '>= 1.1.1'  
 gem 'simple_form', '~> 4.0', '>= 4.0.1'
 gem 'carrierwave', '~> 1.0'
