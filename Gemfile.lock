@@ -245,7 +245,7 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     sentimental (1.5.0)
-    simple_form (4.1.0)
+    simple_form (5.0.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
     spring (2.1.1)
@@ -315,7 +315,7 @@ DEPENDENCIES
   rake (~> 13.0, >= 13.0.1)
   sass-rails (~> 5.0)
   sentimental (~> 1.5)
-  simple_form (~> 4.0, >= 4.0.1)
+  simple_form (~> 5.0)
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
