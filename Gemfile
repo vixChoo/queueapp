@@ -31,7 +31,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'devise', :git => "https://github.com/heartcombo/devise.git", ref: '8bb358cf80a632d3232c3f548ce7b95fd94b6eb2'
 gem 'figaro', '~> 1.1', '>= 1.1.1'
 gem 'simple_form', '~> 4.0', '>= 4.0.1'
-gem 'carrierwave', '~> 1.0'
+gem 'carrierwave', '~> 1.3'
 
 # gem 'fog-aws', '~> 3.0'
 gem 'omniauth'
